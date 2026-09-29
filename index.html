@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BCS Timeline - Smart Preparation</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col max-w-md mx-auto shadow-2xl relative border-x border-slate-800">
+
+    <!-- Header Section -->
+    <header class="bg-indigo-900 p-4 sticky top-0 z-50 shadow-md flex justify-between items-center">
+        <div>
+            <h1 class="text-xl font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-graduation-cap text-amber-400"></i> BCS Timeline
+            </h1>
+            <p class="text-xs text-indigo-200">আপনার স্মার্ট বিসিএস প্রস্তুতি সঙ্গী</p>
+        </div>
+        <button id="headerBtn" onclick="openModal()" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-3 py-1.5 rounded-full text-sm shadow transition">
+            <i class="fa-solid fa-plus"></i> টাস্ক যোগ
+        </button>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 p-4 overflow-y-auto pb-24">
+        
+        <!-- Timeline Tab View -->
+        <div id="timelineTab" class="space-y-4">
+            <div class="bg-gradient-to-r from-indigo-800 to-purple-800 p-4 rounded-2xl shadow-lg text-center">
+                <h2 class="text-sm font-medium text-indigo-200 mb-1"><i class="fa-solid fa-bullseye"></i> বিসিএস লক্ষ্য নির্ধারণ</h2>
+                <div class="text-lg font-bold text-amber-300">প্রস্তুতি চালিয়ে যান</div>
+            </div>
+
+            <h3 class="text-md font-semibold text-slate-300 border-b border-slate-700 pb-2">
+                <i class="fa-solid fa-timeline text-indigo-400"></i> আজকের স্টাডি রুটিন
+            </h3>
+
+            <div id="timelineList" class="space-y-3">
+                <!-- Tasks will load here -->
+            </div>
+        </div>
+
+        <!-- Notes Tab View (Hidden by default) -->
+        <div id="notesTab" class="space-y-4 hidden">
+            <div class="flex justify-between items-center border-b border-slate-700 pb-2">
+                <h3 class="text-md font-semibold text-slate-300">
+                    <i class="fa-solid fa-note-sticky text-amber-400"></i> গুরুত্বপূর্ণ স্টাডি নোটস
+                </h3>
+                <button onclick="openNoteModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs px-2.5 py-1 rounded-lg font-medium">
+                    <i class="fa-solid fa-plus"></i> নতুন নোট
+                </button>
+            </div>
+            
+            <div id="notesList" class="space-y-3">
+                <!-- Notes will load here -->
+            </div>
+        </div>
+
+        <!-- Other Tabs Placeholder -->
+        <div id="syllabusTab" class="hidden text-center py-20 text-slate-400">
+            <i class="fa-solid fa-book-open text-4xl mb-2 text-indigo-500"></i>
+            <p>সিলেবাস ফিচারটি খুব শীঘ্রই আসছে...</p>
+        </div>
+
+        <div id="profileTab" class="hidden text-center py-20 text-slate-400">
+            <i class="fa-solid fa-user-gear text-4xl mb-2 text-indigo-500"></i>
+            <p>প্রোফাইল ও সেটিংস...</p>
+        </div>
+    </main>
+
+    <!-- Add Task Modal -->
+    <div id="taskModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden justify-center items-center z-50 p-4">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-sm p-5 rounded-2xl shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-indigo-300">নতুন টাইমলাইন টাস্ক</h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="taskForm" onsubmit="addTask(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">সময়ের পর্যায়</label>
+                    <input type="text" id="taskTime" placeholder="যেমন: সকাল ৮টা - ১০টা" required class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">বিষয় বা টপিক</label>
+                    <input type="text" id="taskTitle" placeholder="যেমন: বাংলা সাহিত্য" required class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">বিভাগ</label>
+                    <input type="text" id="taskCategory" placeholder="যেমন: বাংলাদেশ বিষয়াবলী" required class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                </div>
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-lg text-sm transition mt-2">সংরক্ষণ করুন</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Note Modal -->
+    <div id="noteModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden justify-center items-center z-50 p-4">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-sm p-5 rounded-2xl shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-amber-300">নতুন নোট তৈরি করুন</h3>
+                <button onclick="closeNoteModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="noteForm" onsubmit="addNote(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">নোটের শিরোনাম</label>
+                    <input type="text" id="noteTitle" placeholder="যেমন: সংবিধানের ধারাগুলো" required class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-amber-500">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">বিস্তারিত বিবরণ বা শর্ટકাট</label>
+                    <textarea id="noteContent" rows="3" placeholder="এখানে আপনার নোট লিখুন..." required class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-amber-500"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-semibold py-2.5 rounded-lg text-sm transition mt-2">নোট সেভ করুন</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bg-slate-900 border-t border-slate-800 fixed bottom-0 left-0 right-0 max-w-md mx-auto flex justify-around p-3 z-40 text-xs text-slate-400">
+        <button onclick="switchTab('timeline', this)" class="nav-btn flex flex-col items-center text-indigo-400 hover:text-indigo-300">
+            <i class="fa-solid fa-list-check text-base"></i>
+            <span>টাইমলাইন</span>
+        </button>
+        <button onclick="switchTab('notes', this)" class="nav-btn flex flex-col items-center hover:text-indigo-300">
+            <i class="fa-solid fa-note-sticky text-base"></i>
+            <span>নোটস</span>
+        </button>
+        <button onclick="switchTab('syllabus', this)" class="nav-btn flex flex-col items-center hover:text-indigo-300">
+            <i class="fa-solid fa-book-open text-base"></i>
+            <span>সিলেবাস</span>
+        </button>
+        <button onclick="switchTab('profile', this)" class="nav-btn flex flex-col items-center hover:text-indigo-300">
+            <i class="fa-solid fa-user text-base"></i>
+            <span>প্রোফাইল</span>
+        </button>
+    </nav>
+
+    <!-- JavaScript -->
+    <script>
+        let currentActiveTab = 'timeline';
+
+        let tasks = JSON.parse(localStorage.getItem('bcs_tasks')) || [
+            { time: "সকাল ০৭:০০ - ০৯:০০", title: "বাংলা সাহিত্য: রবীন্দ্রনাথ ঠাকুর ও কাজী নজরুল ইসলাম", category: "বাংলা ভাষা ও সাহিত্য", completed: false },
+            { time: "সকাল ১০:০০ - ১২:০০", title: "সংবিধানের অনুচ্ছেদ ১ থেকে ৭", category: "বাংলাদেশ বিষয়াবলী", completed: true }
+        ];
+
+        let notes = JSON.parse(localStorage.getItem('bcs_notes')) || [
+            { title: "সংবিধানের মূল বৈশিষ্ট্য", content: "বাংলাদেশের সংবিধান লিখিত এবং এটি গণপ্রজাতন্ত্রী বাংলাদেশের সর্বোচ্চ আইন।" }
+        ];
+
+        function renderTasks() {
+            const listContainer = document.getElementById('timelineList');
+            listContainer.innerHTML = '';
+            
+            if(tasks.length === 0) {
+                listContainer.innerHTML = '<p class="text-center text-slate-500 py-6">কোনো টাস্ক নেই।</p>';
+                return;
+            }
+
+            tasks.forEach((task, index) => {
+                listContainer.innerHTML += `
+                    <div class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-xl shadow relative pl-4 border-l-4 ${task.completed ? 'border-l-emerald-500 opacity-60' : 'border-l-indigo-500'} flex items-start justify-between">
+                        <div class="space-y-1">
+                            <span class="text-xs font-semibold text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded"><i class="fa-regular fa-clock"></i> ${task.time}</span>
+                            <h4 class="text-sm font-medium text-white ${task.completed ? 'line-through text-slate-400' : ''}">${task.title}</h4>
+                            <span class="text-[10px] bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded-full">${task.category}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="toggleTask(${index})" class="text-xl ${task.completed ? 'text-emerald-400' : 'text-slate-500'} hover:text-emerald-300">
+                                <i class="fa-solid fa-circle-check"></i>
+                            </button>
+                            <button onclick="deleteTask(${index})" class="text-slate-500 hover:text-red-400 text-sm">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            localStorage.setItem('bcs_tasks', JSON.stringify(tasks));
+        }
+
+        function renderNotes() {
+            const container = document.getElementById('notesList');
+            container.innerHTML = '';
+
+            if(notes.length === 0) {
+                container.innerHTML = '<p class="text-center text-slate-500 py-6">কোনো নোট সংরক্ষণ করা হয়নি।</p>';
+                return;
+            }
+
+            notes.forEach((note, index) => {
+                container.innerHTML += `
+                    <div class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-xl shadow space-y-1 relative border-l-4 border-l-amber-500">
+                        <div class="flex justify-between items-start">
+                            <h4 class="text-sm font-bold text-amber-300">${note.title}</h4>
+                            <button onclick="deleteNote(${index})" class="text-slate-500 hover:text-red-400 text-xs"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                        <p class="text-xs text-slate-300 whitespace-pre-line">${note.content}</p>
+                    </div>
+                `;
+            });
+            localStorage.setItem('bcs_notes', JSON.stringify(notes));
+        }
+
+        function openModal() {
+            if(currentActiveTab === 'notes') {
+                openNoteModal();
+            } else {
+                document.getElementById('taskModal').classList.remove('hidden');
+                document.getElementById('taskModal').classList.add('flex');
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('taskModal').classList.remove('flex');
+            document.getElementById('taskModal').classList.add('hidden');
+        }
+
+        function openNoteModal() {
+            document.getElementById('noteModal').classList.remove('hidden');
+            document.getElementById('noteModal').classList.add('flex');
+        }
+
+        function closeNoteModal() {
+            document.getElementById('noteModal').classList.remove('flex');
+            document.getElementById('noteModal').classList.add('hidden');
+        }
+
+        function addTask(e) {
+            e.preventDefault();
+            const time = document.getElementById('taskTime').value;
+            const title = document.getElementById('taskTitle').value;
+            const category = document.getElementById('taskCategory').value;
+
+            tasks.push({ time, title, category, completed: false });
+            renderTasks();
+            closeModal();
+            document.getElementById('taskForm').reset();
+        }
+
+        function addNote(e) {
+            e.preventDefault();
+            const title = document.getElementById('noteTitle').value;
+            const content = document.getElementById('noteContent').value;
+
+            notes.push({ title, content });
+            renderNotes();
+            closeNoteModal();
+            document.getElementById('noteForm').reset();
+        }
+
+        function toggleTask(index) {
+            tasks[index].completed = !tasks[index].completed;
+            renderTasks();
+        }
+
+        function deleteTask(index) {
+            tasks.splice(index, 1);
+            renderTasks();
+        }
+
+        function deleteNote(index) {
+            notes.splice(index, 1);
+            renderNotes();
+        }
+
+        function switchTab(tabName, btnElement) {
+            currentActiveTab = tabName;
+            
+            // Hide all tabs
+            document.getElementById('timelineTab').classList.add('hidden');
+            document.getElementById('notesTab').classList.add('hidden');
+            document.getElementById('syllabusTab').classList.add('hidden');
+            document.getElementById('profileTab').classList.add('hidden');
+
+            // Show selected tab
+            document.getElementById(tabName + 'Tab').classList.remove('hidden');
+
+            // Update nav active colors
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('text-indigo-400'));
+            if(btnElement) btnElement.classList.add('text-indigo-400');
+
+            // Update Header button text based on tab
+            const headerBtn = document.getElementById('headerBtn');
+            if(tabName === 'notes') {
+                headerBtn.innerHTML = '<i class="fa-solid fa-plus"></i> নতুন নোট';
+            } else {
+                headerBtn.innerHTML = '<i class="fa-solid fa-plus"></i> টাস্ক যোগ';
+            }
+        }
+
+        // Initial Load
+        renderTasks();
+        renderNotes();
+    </script>
+</body>
+  </html>
+  
